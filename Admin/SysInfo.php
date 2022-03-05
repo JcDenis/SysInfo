@@ -360,7 +360,7 @@ class SysInfo
     public static function adminURLs(): string
     {
         // Récupération de la liste des URLs d'admin enregistrées
-        $urls = dotclear()->adminurl()->dumpUrls();
+        $urls = dotclear()->adminurl()->dump();
 
         $str = '<table id="urls" class="sysinfo"><caption>' . __('Admin registered URLs') . '</caption>' .
             '<thead><tr><th scope="col" class="nowrap">' . __('Name') . '</th>' .
