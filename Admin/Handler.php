@@ -22,7 +22,7 @@ if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
     return;
 }
 
-class Page extends AbstractPage
+class Handler extends AbstractPage
 {
     protected $workspaces = ['interface'];
 
