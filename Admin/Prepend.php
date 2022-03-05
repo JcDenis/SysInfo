@@ -10,41 +10,44 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\SysInfo\Admin;
+
+use ArrayObject;
+
+use Dotclear\Module\AbstractPrepend;
+use Dotclear\Module\TraitPrependAdmin;
+use Dotclear\Plugin\SysInfo\Admin\SysInfoRest;
+use Dotclear\Plugin\SysInfo\Common\SysInfoUrl;
+
+if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
     return;
 }
 
-// dead but useful code, in order to have translations
-__('sysInfo') . __('System Information');
-
-$_menu['System']->addItem(
-    __('System info'),
-    $core->adminurl->get('admin.plugin.sysInfo'),
-    [urldecode(dcPage::getPF('sysInfo/icon.svg')), urldecode(dcPage::getPF('sysInfo/icon-dark.svg'))],
-    preg_match('/' . preg_quote($core->adminurl->get('admin.plugin.sysInfo')) . '(&.*)?$/', $_SERVER['REQUEST_URI']),
-    $core->auth->isSuperAdmin()
-);
-
-/* Register favorite */
-$core->addBehavior('adminDashboardFavorites', ['sysInfoAdmin', 'adminDashboardFavorites']);
-
-class sysInfoAdmin
+class Prepend extends AbstractPrepend
 {
-    public static function adminDashboardFavorites($core, $favs)
+    use TraitPrependAdmin;
+
+    public static function loadModule(): void
     {
-        $favs->register('sysInfo', [
-            'title'       => __('System Information'),
-            'url'         => $core->adminurl->get('admin.plugin.sysInfo'),
-            'small-icon'  => [urldecode(dcPage::getPF('sysInfo/icon.svg')), urldecode(dcPage::getPF('sysInfo/icon-dark.svg'))],
-            'large-icon'  => [urldecode(dcPage::getPF('sysInfo/icon.svg')), urldecode(dcPage::getPF('sysInfo/icon-dark.svg'))],
-            'permissions' => $core->auth->isSuperAdmin(),
-        ]);
+        # dead but useful code, in order to have translations
+        __('sysInfo') . __('System Information');
+
+        # Add menu & fav
+        static::addStandardMenu('System');
+        static::addStandardFavorites();
+
+        # Register rest methods
+        SysInfoRest::initSysInfo();
+        SysInfoUrl::initSysInfo();
+    }
+
+    public static function installModule(): ?bool
+    {
+        dotclear()->blog()->settings()->addNamespace('sysinfo');
+        dotclear()->blog()->settings()->sysinfo->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
+
+        return true;
     }
 }
-
-// Register REST methods
-$core->rest->addFunction('getCompiledTemplate', ['sysInfoRest', 'getCompiledTemplate']);
-$core->rest->addFunction('getStaticCacheFile', ['sysInfoRest', 'getStaticCacheFile']);
-$core->rest->addFunction('getStaticCacheDir', ['sysInfoRest', 'getStaticCacheDir']);
-$core->rest->addFunction('getStaticCacheList', ['sysInfoRest', 'getStaticCacheList']);
-$core->rest->addFunction('getStaticCacheName', ['sysInfoRest', 'getStaticCacheName']);

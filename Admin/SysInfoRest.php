@@ -10,12 +10,22 @@
  * @copyright Franck Paul carnet.franck.paul@gmail.com
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return;
-}
+declare(strict_types=1);
 
-class sysInfoRest
+namespace Dotclear\Plugin\SysInfo\Admin;
+
+class SysInfoRest
 {
+    # Register REST methods
+    public static function initSysInfo()
+    {
+        dotclear()->rest()->addFunction('getCompiledTemplate', ['sysInfoRest', 'getCompiledTemplate']);
+        dotclear()->rest()->addFunction('getStaticCacheFile', ['sysInfoRest', 'getStaticCacheFile']);
+        dotclear()->rest()->addFunction('getStaticCacheDir', ['sysInfoRest', 'getStaticCacheDir']);
+        dotclear()->rest()->addFunction('getStaticCacheList', ['sysInfoRest', 'getStaticCacheList']);
+        dotclear()->rest()->addFunction('getStaticCacheName', ['sysInfoRest', 'getStaticCacheName']);
+    }
+
     public static function getCompiledTemplate($core, $get)
     {
         // Return compiled template file content
