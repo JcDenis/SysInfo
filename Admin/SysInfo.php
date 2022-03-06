@@ -197,10 +197,10 @@ class SysInfo
     {
         // Affichage des constantes remarquables de Dotclear
         $str = '<table id="chk-table-result" class="sysinfo">' .
-            '<caption>' . __('Dotclear constants') . '</caption>' .
+            '<caption>' . __('Dotclear configuration') . '</caption>' .
             '<thead>' .
             '<tr>' .
-            '<th scope="col" class="nowrap">' . __('Constant') . '</th>' .
+            '<th scope="col" class="nowrap">' . __('Parameter') . '</th>' .
             '<th scope="col" class="minimal">' . __('Type') . '</th>' .
             '<th scope="col" class="maximal">' . __('Value') . '</th>' .
             '</tr>' .

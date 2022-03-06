@@ -94,8 +94,8 @@ class Handler extends AbstractPage
                 __('System Information') => '',
             ])
             ->setPageHead(
-                dotclear()->filer()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', dotclear()->version()->get('sysInfo')) .
-                dotclear()->filer()->json('sysinfo', [
+                dotclear()->resource()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', dotclear()->version()->get('sysInfo')) .
+                dotclear()->resource()->json('sysinfo', [
                     'colorsyntax'       => dotclear()->user()->preference()->interface->user_ui_colorsyntax,
                     'colorsyntax_theme' => dotclear()->user()->preference()->interface->user_ui_colorsyntax_theme,
                     'msg'               => [
@@ -106,7 +106,7 @@ class Handler extends AbstractPage
                     ],
                 ]) .
                 static::jsModal() .
-                dotclear()->filer()->load('sysinfo.js', 'Plugin', 'SysInfo', null, dotclear()->version()->get('sysInfo'))
+                dotclear()->resource()->load('sysinfo.js', 'Plugin', 'SysInfo', null, dotclear()->version()->get('sysInfo'))
             )
         ;
 
