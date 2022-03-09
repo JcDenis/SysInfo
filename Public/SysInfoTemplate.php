@@ -5,24 +5,21 @@ namespace Dotclear\Plugin\SysInfo\Public;
 
 class SysInfoTemplate
 {
-    public static function initSysInfo()
+    public function __construct()
     {
-        dotclear()->template()->addValue('SysInfoPageTitle', [__CLASS__, 'SysInfoPageTitle']);
-        dotclear()->template()->addValue('SysInfoBehaviours', [__CLASS__, 'SysInfoBehaviours']);
-        dotclear()->template()->addValue('SysInfoTemplatetags', [__CLASS__, 'SysInfoTemplatetags']);
-    }
-
-    public static function SysInfoPageTitle($attr)
-    {
-        return '<?php echo \'' . __('System Information') . '\'; ?>';
-    }
-
-    public static function SysInfoBehaviours($attr)
-    {
-        $code = '<h3>' . '<?php echo \'' . __('Public behaviours list') . '\'; ?>' . '</h3>' . "\n";
-        $code .= '<?php echo ' . __CLASS__ . '::publicBehavioursList(); ?>';
-
-        return $code;
+        dotclear()->template()->addValue('SysInfoPageTitle', function($attr): string {
+            return '<?php echo \'' . __('System Information') . '\'; ?>';
+        });
+        dotclear()->template()->addValue('SysInfoBehaviours', function($attr): string {
+            return 
+                '<h3>' . '<?php echo \'' . __('Public behaviours list') . '\'; ?>' . '</h3>' . "\n" .
+                '<?php echo ' . __CLASS__ . '::publicBehavioursList(); ?>';
+        });
+        dotclear()->template()->addValue('SysInfoTemplatetags', function($attr): string {
+            return
+                '<h3>' . '<?php echo \'' . __('Template tags list') . '\'; ?>' . '</h3>' . "\n" .
+                '<?php echo ' . __CLASS__ . '::publicTemplatetagsList(); ?>';
+        });
     }
 
     public static function publicBehavioursList()
@@ -56,14 +53,6 @@ class SysInfoTemplate
             $code .= '</li>' . "\n";
         }
         $code .= '</ul>' . "\n";
-
-        return $code;
-    }
-
-    public static function SysInfoTemplatetags($attr)
-    {
-        $code = '<h3>' . '<?php echo \'' . __('Template tags list') . '\'; ?>' . '</h3>' . "\n";
-        $code .= '<?php echo ' . __CLASS__ . '::publicTemplatetagsList(); ?>';
 
         return $code;
     }

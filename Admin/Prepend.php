@@ -29,21 +29,21 @@ class Prepend extends AbstractPrepend
 {
     use TraitPrependAdmin;
 
-    public static function loadModule(): void
+    public function loadModule(): void
     {
         # dead but useful code, in order to have translations
         __('sysInfo') . __('System Information');
 
         # Add menu & fav
-        static::addStandardMenu('System');
-        static::addStandardFavorites();
+        $this->addStandardMenu('System');
+        $this->addStandardFavorites();
 
         # Register rest methods
-        SysInfoRest::initSysInfo();
-        SysInfoUrl::initSysInfo();
+        new SysInfoRest();
+        new SysInfoUrl();
     }
 
-    public static function installModule(): ?bool
+    public function installModule(): ?bool
     {
         dotclear()->blog()->settings()->addNamespace('sysinfo');
         dotclear()->blog()->settings()->sysinfo->put('http_cache', true, 'boolean', 'HTTP cache', false, true);

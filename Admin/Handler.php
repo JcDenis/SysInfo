@@ -105,14 +105,14 @@ class Handler extends AbstractPage
                         'sc_not_found'    => __('Static cache file not found or unreadable'),
                     ],
                 ]) .
-                static::jsModal() .
+                dotclear()->resource()->modal() .
                 dotclear()->resource()->load('sysinfo.js', 'Plugin', 'SysInfo', null, dotclear()->version()->get('sysInfo'))
             )
         ;
 
         if (dotclear()->user()->preference()->interface->user_ui_colorsyntax) {
             $this->setPageHead(
-                static ::jsLoadCodeMirror(dotclear()->user()->preference()->interface->user_ui_colorsyntax_theme)
+                dotclear()->resource()->loadCodeMirror(dotclear()->user()->preference()->interface->user_ui_colorsyntax_theme)
             );
         }
 

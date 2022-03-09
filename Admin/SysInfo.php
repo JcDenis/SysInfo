@@ -83,7 +83,11 @@ class SysInfo
             $str .= '<tr><td class="nowrap">' . $method . '</td><td class="maximal"><code>';
             if (is_array($callback)) {
                 if (count($callback) > 1) {
-                    $str .= $callback[0] . '::' . $callback[1];
+                    if (is_string($callback[0])) {
+                        $str .= $callback[0] . '::' . $callback[1];
+                    } else {
+                        $str .=  $callback[0]::class . '->' . $callback[1];
+                    }
                 } else {
                     $str .= $callback[0];
                 }

@@ -23,7 +23,7 @@ class Prepend extends AbstractPrepend
 {
     use TraitPrependPublic;
 
-    public static function loadModule(): void
+    public function loadModule(): void
     {
         dotclear()->behavior()->add('publicBreadcrumb', function ($context, $separator): string {
             return $context == 'sysinfo' ? __('System Information') : '';
@@ -34,7 +34,7 @@ class Prepend extends AbstractPrepend
                 $ctx->http_cache = (bool) dotclear()->blog()->settings()->sysinfo->http_cache;
         });
 
-        SysInfoTemplate::initSysInfo();
-        SysInfoUrl::initSysInfo();
+        new SysInfoTemplate();
+        new SysInfoUrl();
     }
 }
