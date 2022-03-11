@@ -131,18 +131,19 @@ class SysInfo
                 $str .= '<td class="minimal">' . ($old_k != $k ? $k : ' ') . '</td>';
                 $str .= '<td class="maximal"><pre class="sysinfo">';
 
-            $t = gettype($v);
-            if (is_array($v)) {
-                foreach($v as $kk => $vv) {
-                    if (is_array($vv)) {
-                        $vv = implode(' => ', $vv);
+                if (is_array($v)) {
+                    foreach($v as $kk => $vv) {
+                        if (is_array($vv)) {
+                            $vv = implode(' => ', $vv);
+                        }
+                        $v[$kk] = $vv;
                     }
-                    $v[$kk] = $vv;
+                    $v = implode(', ', $v);
+                } elseif (is_bool($v)) {
+                    $v = '<strong>' . ($v ? __('yes') : __('no')) . '</strong>';
+                } elseif (is_string($v) && 0 === strpos($v, 'http')) {
+                    $v = sprintf('<a href="%1$s">%1$s</a>', $v);
                 }
-                $v = implode(', ', $v);
-            } elseif (is_bool($v)) {
-                $v = '<strong>' . ($v ? __('yes') : __('no')) . '</strong>';
-            }
 
                 $str .= $v . '</pre></td>';
                 $str .= '</tr>';
