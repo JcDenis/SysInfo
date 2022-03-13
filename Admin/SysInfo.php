@@ -796,7 +796,7 @@ class SysInfo
         # Check templateset and add all path to tpl
         $tplset = dotclear()->themes->getModule(array_key_last($path))->templateset();
         if (!empty($tplset)) {
-            $tplset_dir = root_path('Process', 'Public', 'templates', $tplset);
+            $tplset_dir = Path::implodeRoot('Process', 'Public', 'templates', $tplset);
             if (is_dir($tplset_dir)) {
                 self::$template->setPath($path, $tplset_dir, self::$template->getPath());
             } else {
