@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Admin;
 
-use Dotclear\Html\Form;
+use Dotclear\Helper\Html\Form;
 use Dotclear\Module\AbstractPage;
 use Dotclear\Plugin\SysInfo\Admin\SysInfo;
 

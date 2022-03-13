@@ -15,14 +15,14 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Admin;
 
-use Dotclear\Html\Form;
-use Dotclear\Html\Html;
-use Dotclear\File\Files;
-use Dotclear\File\Path;
+use Dotclear\Helper\Html\Form;
+use Dotclear\Helper\Html\Html;
+use Dotclear\Helper\File\Files;
+use Dotclear\Helper\File\Path;
+use Dotclear\Helper\Network\Http;
+use Dotclear\Helper\Utils\Lexical;
 use Dotclear\Module\Store\Repository\RepositoryReader;
-use Dotclear\Network\Http;
 use Dotclear\Process\Public\Template\Template;
-use Dotclear\Utils\Lexical;
 
 if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
     return;
