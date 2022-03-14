@@ -30,7 +30,6 @@ class Prepend extends AbstractPrepend
         });
 
         dotclear()->behavior()->add('urlHandlerBeforeGetData', function ($ctx): void {
-                dotclear()->blog()->settings()->addNamespace('sysinfo');
                 $ctx->http_cache = (bool) dotclear()->blog()->settings()->sysinfo->http_cache;
         });
 

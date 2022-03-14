@@ -20,7 +20,7 @@ use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\Network\Http;
-use Dotclear\Helper\Utils\Lexical;
+use Dotclear\Helper\Lexical;
 use Dotclear\Module\Store\Repository\RepositoryReader;
 use Dotclear\Process\Public\Template\Template;
 
@@ -789,7 +789,6 @@ class SysInfo
     private static function publicPrepend(): string
     {
         $path = dotclear()->themes->getThemePath('templates/tpl');
-        dotclear()->blog()->settings()->addNamespace('themes');
 
         self::$template    = new Template(dotclear()->config()->cache_dir, __CLASS__ . '::$template');
 

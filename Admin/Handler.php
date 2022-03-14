@@ -24,8 +24,6 @@ if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
 
 class Handler extends AbstractPage
 {
-    protected $workspaces = ['interface'];
-
     private $si_checklists = [];
     private $si_checklist  = '';
 

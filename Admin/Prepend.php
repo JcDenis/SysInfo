@@ -45,7 +45,6 @@ class Prepend extends AbstractPrepend
 
     public function installModule(): ?bool
     {
-        dotclear()->blog()->settings()->addNamespace('sysinfo');
         dotclear()->blog()->settings()->sysinfo->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
 
         return true;

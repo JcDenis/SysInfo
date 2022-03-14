@@ -17,16 +17,16 @@ namespace Dotclear\Plugin\SysInfo\Admin;
 class SysInfoRest
 {
     # Register REST methods
-    public static function initSysInfo()
+    public function __construct()
     {
-        dotclear()->rest()->addFunction('getCompiledTemplate', ['sysInfoRest', 'getCompiledTemplate']);
-        dotclear()->rest()->addFunction('getStaticCacheFile', ['sysInfoRest', 'getStaticCacheFile']);
-        dotclear()->rest()->addFunction('getStaticCacheDir', ['sysInfoRest', 'getStaticCacheDir']);
-        dotclear()->rest()->addFunction('getStaticCacheList', ['sysInfoRest', 'getStaticCacheList']);
-        dotclear()->rest()->addFunction('getStaticCacheName', ['sysInfoRest', 'getStaticCacheName']);
+        dotclear()->rest()->addFunction('getCompiledTemplate', [$this, 'getCompiledTemplate']);
+        dotclear()->rest()->addFunction('getStaticCacheFile', [$this, 'getStaticCacheFile']);
+        dotclear()->rest()->addFunction('getStaticCacheDir', [$this, 'getStaticCacheDir']);
+        dotclear()->rest()->addFunction('getStaticCacheList', [$this, 'getStaticCacheList']);
+        dotclear()->rest()->addFunction('getStaticCacheName', [$this, 'getStaticCacheName']);
     }
 
-    public static function getCompiledTemplate($core, $get)
+    public function getCompiledTemplate($core, $get)
     {
         // Return compiled template file content
         $file    = !empty($get['file']) ? $get['file'] : '';
@@ -53,7 +53,7 @@ class SysInfoRest
         return $rsp;
     }
 
-    public static function getStaticCacheDir($core, $get)
+    public function getStaticCacheDir($core, $get)
     {
         // Return list of folders in a given cache folder
         $root    = !empty($get['root']) ? $get['root'] : '';
@@ -101,7 +101,7 @@ class SysInfoRest
         return $rsp;
     }
 
-    public static function getStaticCacheList($core, $get)
+    public function getStaticCacheList($core, $get)
     {
         // Return list of folders and files in a given folder
         $root    = !empty($get['root']) ? $get['root'] : '';
@@ -169,7 +169,7 @@ class SysInfoRest
         return $rsp;
     }
 
-    public static function getStaticCacheName($core, $get)
+    public function getStaticCacheName($core, $get)
     {
         // Return static cache filename from a given URL
         $url     = !empty($get['url']) ? $get['url'] : '';
@@ -194,7 +194,7 @@ class SysInfoRest
         return $rsp;
     }
 
-    public static function getStaticCacheFile($core, $get)
+    public function getStaticCacheFile($core, $get)
     {
         // Return compiled static cache file content
         $file    = !empty($get['file']) ? $get['file'] : '';
