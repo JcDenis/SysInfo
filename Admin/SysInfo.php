@@ -86,7 +86,7 @@ class SysInfo
                     if (is_string($callback[0])) {
                         $str .= $callback[0] . '::' . $callback[1];
                     } else {
-                        $str .=  $callback[0]::class . '->' . $callback[1];
+                        $str .=  get_class($callback[0]) . '->' . $callback[1];
                     }
                 } else {
                     $str .= $callback[0];
