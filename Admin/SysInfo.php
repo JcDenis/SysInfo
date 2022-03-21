@@ -891,7 +891,7 @@ class SysInfo
             }
             foreach ($subfolder as $folder) {
                 $path     = Path::real($folder);
-                $writable = is_writable($path);
+                $writable = $path && is_writable($path);
                 $touch    = true;
                 $err      = [];
                 $void     = '';
@@ -927,7 +927,7 @@ class SysInfo
 */
                 $str .= '<tr>' .
                 '<td scope="row" class="nowrap">' . $name . '</td>' .
-                '<td class="maximal">' . Path::real($folder) . '</td>' .
+                '<td class="maximal">' . Path::real($folder, false) . '</td>' .
                 '<td class="nowrap">' . $status . '</td>' .
                 '</tr>';
 
