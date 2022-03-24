@@ -24,7 +24,7 @@ class SysInfoUrl extends Url
 
     private function sysInfoServeDocument(string $doc): void
     {
-            $module = dotclear()->themes->getModule(dotclear()->blog()->settings()->system->theme);
+            $module = dotclear()->themes()->getModule(dotclear()->blog()->settings()->system->theme);
             $tplset = $module ? $module->templateset() : null;
             if (!empty($tplset) && is_dir(__DIR__ . '/../templates/' . $tplset)) {
                 dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . $tplset);

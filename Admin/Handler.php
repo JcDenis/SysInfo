@@ -69,7 +69,7 @@ class Handler extends AbstractPage
             ],
         ];
 
-        if (dotclear()->plugins && dotclear()->plugins->hasModule('staticCache')) {
+        if (dotclear()->plugins()?->hasModule('staticCache')) {
             if (defined('DC_SC_CACHE_ENABLE') && DC_SC_CACHE_ENABLE) {
                 if (defined('DC_SC_CACHE_DIR')) {
                     if (dcStaticCacheControl::cacheCurrentBlog()) {

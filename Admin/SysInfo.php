@@ -109,7 +109,7 @@ class SysInfo
     public static function plugins(): string
     {
         // Affichage de la liste des plugins (et de leurs propriétés)
-        $plugins = dotclear()->plugins->getModules();
+        $plugins = dotclear()->plugins()->getModules();
 
         $thead = 
             '<tr>' .
@@ -788,12 +788,12 @@ class SysInfo
      */
     private static function publicPrepend(): string
     {
-        $path = dotclear()->themes->getThemePath('templates/tpl');
+        $path = dotclear()->themes()->getThemePath('templates/tpl');
 
         self::$template    = new Template(dotclear()->config()->cache_dir, __CLASS__ . '::$template');
 
         # Check templateset and add all path to tpl
-        $tplset = dotclear()->themes->getModule(array_key_last($path))->templateset();
+        $tplset = dotclear()->themes()->getModule(array_key_last($path))->templateset();
         if (!empty($tplset)) {
             $tplset_dir = Path::implodeRoot('Process', 'Public', 'templates', $tplset);
             if (is_dir($tplset_dir)) {
@@ -807,7 +807,7 @@ class SysInfo
         }
 
         // Looking for default-templates in each plugin's dir
-        foreach (dotclear()->plugins->getModules() as $id => $module) {
+        foreach (dotclear()->plugins()->getModules() as $id => $module) {
             $plugin_tpl = Path::real($module->root() . '/templates/' . $tplset);
             if (!empty($plugin_tpl) && is_dir($plugin_tpl)) {
                 self::$template->setPath(self::$template->getPath(), $plugin_tpl);
@@ -842,7 +842,7 @@ class SysInfo
 
         ];
 
-        if (dotclear()->plugins->hasModule('StaticCache')) {
+        if (dotclear()->plugins()->hasModule('StaticCache')) {
             $constants['DC_SC_CACHE_ENABLE']    = defined('DC_SC_CACHE_ENABLE') ? (DC_SC_CACHE_ENABLE ? __('yes') : __('no')) : $undefined;
             $constants['DC_SC_CACHE_DIR']       = defined('DC_SC_CACHE_DIR') ? DC_SC_CACHE_DIR : $undefined;
             $constants['DC_SC_CACHE_BLOGS_ON']  = defined('DC_SC_CACHE_BLOGS_ON') ? DC_SC_CACHE_BLOGS_ON : $undefined;
@@ -868,9 +868,9 @@ class SysInfo
             ],
             'digest'   => dotclear()->config()->digests_dir,
             'l10n'     => dotclear()->config()->l10n_dir,
-            'plugins'  => dotclear()->plugins ? dotclear()->plugins->getModulesPath() : [],
-            'themes'   => dotclear()->themes ? dotclear()->themes->getModulesPath() : [],
-            'iconsets' => dotclear()->iconsets ? dotclear()->iconsets->getModulesPath() : [],
+            'plugins'  => dotclear()->plugins() ? dotclear()->plugins()->getModulesPath() : [],
+            'themes'   => dotclear()->themes() ? dotclear()->themes()->getModulesPath() : [],
+            'iconsets' => dotclear()->iconsets() ? dotclear()->iconsets()->getModulesPath() : [],
             'public'   => dotclear()->blog()->public_path,
             'var'      => dotclear()->config()->var_dir,
         ];
