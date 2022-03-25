@@ -868,9 +868,9 @@ class SysInfo
             ],
             'digest'   => dotclear()->config()->digests_dir,
             'l10n'     => dotclear()->config()->l10n_dir,
-            'plugins'  => dotclear()->plugins() ? dotclear()->plugins()->getModulesPath() : [],
-            'themes'   => dotclear()->themes() ? dotclear()->themes()->getModulesPath() : [],
-            'iconsets' => dotclear()->iconsets() ? dotclear()->iconsets()->getModulesPath() : [],
+            'plugins'  => dotclear()->plugins()?->getModulesPath() ?? [],
+            'themes'   => dotclear()->themes()?->getModulesPath() ?? [],
+            'iconsets' => dotclear()->iconsets()?->getModulesPath() ?? [],
             'public'   => dotclear()->blog()->public_path,
             'var'      => dotclear()->config()->var_dir,
         ];
