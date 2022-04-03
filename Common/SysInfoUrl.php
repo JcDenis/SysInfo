@@ -24,12 +24,12 @@ class SysInfoUrl extends Url
 
     private function sysInfoServeDocument(string $doc): void
     {
-            $module = dotclear()->themes()->getModule(dotclear()->blog()->settings()->system->theme);
+            $module = dotclear()->themes()->getModule(dotclear()->blog()->settings()->get('system')->get('theme'));
             $tplset = $module ? $module->templateset() : null;
             if (!empty($tplset) && is_dir(__DIR__ . '/../templates/' . $tplset)) {
                 dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . $tplset);
             } else {
-                dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . dotclear()->config()->template_default);
+                dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . dotclear()->config()->get('template_default'));
             }
             dotclear()->url()->serveDocument($doc . '.html');
             exit;

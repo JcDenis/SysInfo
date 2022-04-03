@@ -24,10 +24,6 @@ use Dotclear\Helper\Lexical;
 use Dotclear\Module\Store\Repository\RepositoryReader;
 use Dotclear\Process\Public\Template\Template;
 
-if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
-    return;
-}
-
 class SysInfo
 {
     public static $template;
@@ -435,11 +431,11 @@ class SysInfo
         $tplset = self::publicPrepend();
 
         $document_root = (!empty($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '');
-        $cache_path    = Path::real(dotclear()->config()->cache_dir);
+        $cache_path    = Path::real(dotclear()->config()->get('cache_dir'));
         if (substr($cache_path, 0, strlen($document_root)) == $document_root) {
             $cache_path = substr($cache_path, strlen($document_root));
-        } elseif (substr($cache_path, 0, strlen(dotclear()->config()->root_dir)) == dotclear()->config()->root_dir) {
-            $cache_path = substr($cache_path, strlen(dotclear()->config()->root_dir));
+        } elseif (substr($cache_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
+            $cache_path = substr($cache_path, strlen(dotclear()->config()->get('root_dir')));
         }
         $blog_host = dotclear()->blog()->host;
         if (substr($blog_host, -1) != '/') {
@@ -475,8 +471,8 @@ class SysInfo
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
-            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->root_dir)) == dotclear()->config()->root_dir) {
-                $sub_path = substr($sub_path, strlen(dotclear()->config()->root_dir));
+            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
+                $sub_path = substr($sub_path, strlen(dotclear()->config()->get('root_dir')));
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
@@ -493,7 +489,7 @@ class SysInfo
                                 $stack[]        = $file;
                                 $cache_file     = md5($md5_path . '/' . $file) . '.php';
                                 $cache_subpath  = sprintf('%s/%s', substr($cache_file, 0, 2), substr($cache_file, 2, 2));
-                                $cache_fullpath = Path::real(dotclear()->config()->cache_dir) . '/cbtpl/' . $cache_subpath;
+                                $cache_fullpath = Path::real(dotclear()->config()->get('cache_dir')) . '/cbtpl/' . $cache_subpath;
                                 $file_check     = $cache_fullpath . '/' . $cache_file;
                                 $file_exists    = File_exists($file_check);
                                 // $file_url       = Http::getHost() . $cache_path . '/cbtpl/' . $cache_subpath . '/' . $cache_file;
@@ -548,7 +544,7 @@ class SysInfo
                 if (empty($_POST['tpl'])) {
                     throw new \Exception(__('No cache file selected'));
                 }
-                $root_cache = Path::real(dotclear()->config()->cache_dir) . '/cbtpl/';
+                $root_cache = Path::real(dotclear()->config()->get('cache_dir')) . '/cbtpl/';
                 foreach ($_POST['tpl'] as $k => $v) {
                     $cache_file = $root_cache . sprintf('%s/%s', substr($v, 0, 2), substr($v, 2, 2)) . '/' . $v;
                     if (file_exists($cache_file)) {
@@ -600,8 +596,8 @@ class SysInfo
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
-            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->root_dir)) == dotclear()->config()->root_dir) {
-                $sub_path = substr($sub_path, strlen(dotclear()->config()->root_dir));
+            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
+                $sub_path = substr($sub_path, strlen(dotclear()->config()->get('root_dir')));
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
@@ -627,7 +623,7 @@ class SysInfo
      */
     private static function repoModules(bool $use_cache, string $url, string $title, string $label): string
     {
-        $cache_path = Path::real(dotclear()->config()->cache_dir);
+        $cache_path = Path::real(dotclear()->config()->get('cache_dir'));
         $xml_url    = $url;
         $in_cache   = false;
 
@@ -645,7 +641,7 @@ class SysInfo
                 $in_cache = true;
             }
         }
-        $parser    = RepositoryReader::quickParse($xml_url, dotclear()->config()->cache_dir, !$in_cache);
+        $parser    = RepositoryReader::quickParse($xml_url, dotclear()->config()->get('cache_dir'), !$in_cache);
         $raw_datas = !$parser ? [] : $parser->getModules();
         Lexical::lexicalKeySort($raw_datas);
 
@@ -684,7 +680,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            dotclear()->blog()->settings()->system->store_plugin_url,
+            dotclear()->blog()->settings()->get('system')->get('store_plugin_url'),
             __('Repository plugins list'),
             __('Plugin ID')
         );
@@ -701,7 +697,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            dotclear()->blog()->settings()->system->store_theme_url,
+            dotclear()->blog()->settings()->get('system')->get('store_theme_url'),
             __('Repository themes list'),
             __('Theme ID')
         );
@@ -743,14 +739,14 @@ class SysInfo
         // Dotclear info
         $dotclear = '<details open><summary>' . __('Dotclear info') . '</summary>' .
             '<ul>' .
-            '<li>' . __('Dotclear version: ') . '<strong>' . dotclear()->config()->core_version . '</strong></li>' .
+            '<li>' . __('Dotclear version: ') . '<strong>' . dotclear()->config()->get('core_version') . '</strong></li>' .
             '</ul>' .
             '</details>';
 
         // Update info
 
         $versions = '';
-        $path     = Path::real(dotclear()->config()->cache_dir . '/versions');
+        $path     = Path::real(dotclear()->config()->get('cache_dir') . '/versions');
         if (is_dir($path)) {
             $channels = ['stable', 'testing', 'unstable'];
             foreach ($channels as $channel) {
@@ -790,7 +786,7 @@ class SysInfo
     {
         $path = dotclear()->themes()->getThemePath('templates/tpl');
 
-        self::$template    = new Template(dotclear()->config()->cache_dir, __CLASS__ . '::$template');
+        self::$template    = new Template(dotclear()->config()->get('cache_dir'), __CLASS__ . '::$template');
 
         # Check templateset and add all path to tpl
         $tplset = dotclear()->themes()->getModule(array_key_last($path))->templateset();
@@ -829,7 +825,6 @@ class SysInfo
             'DOTCLEAR_ROOT_DIR' => defined('DOTCLEAR_ROOT_DIR') ? DOTCLEAR_ROOT_DIR : $undefined, 
             'DOTCLEAR_ERROR_FILE' => defined('DOTCLEAR_ERROR_FILE') ? DOTCLEAR_ERROR_FILE : $undefined, 
             'DOTCLEAR_BEHAVIOR_TRACE' => defined('DOTCLEAR_BEHAVIOR_TRACE') ? (DOTCLEAR_BEHAVIOR_TRACE ? __('yes') : __('no')) : $undefined,
-            'DOTCLEAR_PROCESS' => defined('DOTCLEAR_PROCESS') ? DOTCLEAR_PROCESS : $undefined,
             'DOTCLEAR_CONFIG_PATH' => defined('DOTCLEAR_CONFIG_PATH') ? DOTCLEAR_CONFIG_PATH : $undefined, 
             'DOTCLEAR_AUTH_SESS_UID' => defined('DOTCLEAR_AUTH_SESS_UID') ? DOTCLEAR_AUTH_SESS_UID : $undefined,
             'DOTCLEAR_SCH_CLASS' => defined('DOTCLEAR_SCH_CLASS') ? DOTCLEAR_SCH_CLASS : $undefined,
@@ -857,22 +852,22 @@ class SysInfo
     {
         // Check generic Dotclear folders
         $folders = [
-            'root'     => dotclear()->config()->root_dir,
+            'root'     => dotclear()->config()->get('root_dir'),
             'config'   => DOTCLEAR_CONFIG_PATH,
             'cache'    => [
-                dotclear()->config()->cache_dir,
-                dotclear()->config()->cache_dir . '/cbfeed',
-                dotclear()->config()->cache_dir . '/cbtpl',
-                dotclear()->config()->cache_dir . '/dcrepo',
-                dotclear()->config()->cache_dir . '/versions',
+                dotclear()->config()->get('cache_dir'),
+                dotclear()->config()->get('cache_dir') . '/cbfeed',
+                dotclear()->config()->get('cache_dir') . '/cbtpl',
+                dotclear()->config()->get('cache_dir') . '/dcrepo',
+                dotclear()->config()->get('cache_dir') . '/versions',
             ],
-            'digest'   => dotclear()->config()->digests_dir,
-            'l10n'     => dotclear()->config()->l10n_dir,
+            'digest'   => dotclear()->config()->get('digests_dir'),
+            'l10n'     => dotclear()->config()->get('l10n_dir'),
             'plugins'  => dotclear()->plugins()?->getModulesPath() ?? [],
             'themes'   => dotclear()->themes()?->getModulesPath() ?? [],
             'iconsets' => dotclear()->iconsets()?->getModulesPath() ?? [],
             'public'   => dotclear()->blog()->public_path,
-            'var'      => dotclear()->config()->var_dir,
+            'var'      => dotclear()->config()->get('var_dir'),
         ];
 
         if (defined('DC_SC_CACHE_DIR')) {
@@ -921,8 +916,8 @@ class SysInfo
                     $status .= '<div style="display: none;"><p>' . implode('<br />', $err) . '</p></div>';
                 }
 /*
-                if (substr($folder, 0, strlen(dotclear()->config()->root_dir)) === dotclear()->config()->root_dir) {
-                    $folder = substr_replace($folder, '<code>DOTCLEAR_ROOT_DIR</code> ', 0, strlen(dotclear()->config()->root_dir));
+                if (substr($folder, 0, strlen(dotclear()->config()->get('root_dir'))) === dotclear()->config()->get('root_dir')) {
+                    $folder = substr_replace($folder, '<code>DOTCLEAR_ROOT_DIR</code> ', 0, strlen(dotclear()->config()->get('root_dir')));
                 }
 */
                 $str .= '<tr>' .

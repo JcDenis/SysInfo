@@ -178,7 +178,7 @@ class SysInfoRest
         $content = '';
 
         // Extract REQUEST_URI from URL if possible
-        $blog_host = $core->blog->host;
+        $blog_host = dotclear()->blog()->host;
         if (substr($url, 0, strlen($blog_host)) == $blog_host) {
             $url = substr($url, strlen($blog_host));
         }

@@ -21,10 +21,6 @@ use Dotclear\Module\TraitPrependAdmin;
 use Dotclear\Plugin\SysInfo\Admin\SysInfoRest;
 use Dotclear\Plugin\SysInfo\Common\SysInfoUrl;
 
-if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
-    return;
-}
-
 class Prepend extends AbstractPrepend
 {
     use TraitPrependAdmin;
@@ -45,7 +41,7 @@ class Prepend extends AbstractPrepend
 
     public function installModule(): ?bool
     {
-        dotclear()->blog()->settings()->sysinfo->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
+        dotclear()->blog()->settings()->get('sysinfo')->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
 
         return true;
     }

@@ -18,10 +18,6 @@ use Dotclear\Helper\Html\Form;
 use Dotclear\Module\AbstractPage;
 use Dotclear\Plugin\SysInfo\Admin\SysInfo;
 
-if (!defined('DOTCLEAR_PROCESS') || DOTCLEAR_PROCESS != 'Admin') {
-    return;
-}
-
 class Handler extends AbstractPage
 {
     private $si_checklists = [];
@@ -94,8 +90,8 @@ class Handler extends AbstractPage
             ->setPageHead(
                 dotclear()->resource()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', dotclear()->version()->get('sysInfo')) .
                 dotclear()->resource()->json('sysinfo', [
-                    'colorsyntax'       => dotclear()->user()->preference()->interface->user_ui_colorsyntax,
-                    'colorsyntax_theme' => dotclear()->user()->preference()->interface->user_ui_colorsyntax_theme,
+                    'colorsyntax'       => dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax'),
+                    'colorsyntax_theme' => dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'),
                     'msg'               => [
                         'confirm_del_tpl' => __('Are you sure you want to remove selected template cache files?'),
                         'confirm_del_sc'  => __('Are you sure you want to remove selected static cache files?'),
@@ -108,9 +104,9 @@ class Handler extends AbstractPage
             )
         ;
 
-        if (dotclear()->user()->preference()->interface->user_ui_colorsyntax) {
+        if (dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax')) {
             $this->setPageHead(
-                dotclear()->resource()->loadCodeMirror(dotclear()->user()->preference()->interface->user_ui_colorsyntax_theme)
+                dotclear()->resource()->loadCodeMirror(dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'))
             );
         }
 
