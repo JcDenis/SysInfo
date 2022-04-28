@@ -3,19 +3,21 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Public;
 
+use Dotclear\App;
+
 class SysInfoTemplate
 {
     public function __construct()
     {
-        dotclear()->template()->addValue('SysInfoPageTitle', function($attr): string {
+        App::core()->template()->addValue('SysInfoPageTitle', function($attr): string {
             return '<?php echo \'' . __('System Information') . '\'; ?>';
         });
-        dotclear()->template()->addValue('SysInfoBehaviours', function($attr): string {
+        App::core()->template()->addValue('SysInfoBehaviours', function($attr): string {
             return 
                 '<h3>' . '<?php echo \'' . __('Public behaviours list') . '\'; ?>' . '</h3>' . "\n" .
                 '<?php echo ' . __CLASS__ . '::publicBehavioursList(); ?>';
         });
-        dotclear()->template()->addValue('SysInfoTemplatetags', function($attr): string {
+        App::core()->template()->addValue('SysInfoTemplatetags', function($attr): string {
             return
                 '<h3>' . '<?php echo \'' . __('Template tags list') . '\'; ?>' . '</h3>' . "\n" .
                 '<?php echo ' . __CLASS__ . '::publicTemplatetagsList(); ?>';
@@ -26,7 +28,7 @@ class SysInfoTemplate
     {
         $code = '<ul>' . "\n";
 
-        $bl = dotclear()->behavior()->dump();
+        $bl = App::core()->behavior()->dump();
         foreach ($bl as $b => $f) {
             $code .= '<li>' . $b . ' : ';
             if (is_array($f)) {
@@ -61,8 +63,8 @@ class SysInfoTemplate
     {
         $code = '<ul>' . "\n";
 
-        $tplblocks = array_values(dotclear()->template()->getBlockslist());
-        $tplvalues = array_values(dotclear()->template()->getValueslist());
+        $tplblocks = array_values(App::core()->template()->getBlockslist());
+        $tplvalues = array_values(App::core()->template()->getValueslist());
 
         sort($tplblocks, SORT_STRING);
         sort($tplvalues, SORT_STRING);

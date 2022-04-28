@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Admin;
 
+use Dotclear\App;
 use Dotclear\Helper\Html\Form;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\File\Files;
@@ -35,7 +36,7 @@ class SysInfo
      */
     public static function permissions(): string
     {
-        $permissions = dotclear()->user()->getPermissionsTypes();
+        $permissions = App::core()->user()->getPermissionsTypes();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Types of permission') . '</caption>' .
@@ -64,7 +65,7 @@ class SysInfo
      */
     public static function restMethods(): string
     {
-        $methods = dotclear()->rest()->functions;
+        $methods = App::core()->rest()->dump();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('REST methods') . '</caption>' .
@@ -105,7 +106,7 @@ class SysInfo
     public static function plugins(): string
     {
         // Affichage de la liste des plugins (et de leurs propriétés)
-        $plugins = dotclear()->plugins()->getModules();
+        $plugins = App::core()->plugins()->getModules();
 
         $thead = 
             '<tr>' .
@@ -162,7 +163,7 @@ class SysInfo
     public static function formaters(): string
     {
         // Affichage de la liste des éditeurs et des syntaxes par éditeur
-        $formaters = dotclear()->formater()->getFormaters();
+        $formaters = App::core()->formater()->getFormaters();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Editors and their supported syntaxes') . '</caption>' .
@@ -207,7 +208,7 @@ class SysInfo
             '</tr>' .
             '</thead>' .
             '<tbody>';
-        foreach (dotclear()->config()->dump() as $c => $v) {
+        foreach (App::core()->config()->dump() as $c => $v) {
             $t = gettype($v);
             if (is_array($v)) {
                 $v = implode(', ', $v);
@@ -269,7 +270,7 @@ class SysInfo
     public static function behaviours(): string
     {
         // Affichage de la liste des behaviours inscrits
-        $bl = dotclear()->behavior()->dump();
+        $bl = App::core()->behavior()->dump();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Behaviours list') . '</caption>' .
@@ -309,7 +310,7 @@ class SysInfo
         }
         $str .= '</tbody></table>';
 
-        $str .= '<p><a id="sysinfo-preview" href="' . dotclear()->blog()->url . dotclear()->url()->getURLFor('sysinfo') . '/behaviours' . '">' . __('Display public behaviours') . '</a></p>';
+        $str .= '<p><a id="sysinfo-preview" href="' . App::core()->blog()->url . App::core()->url()->getURLFor('sysinfo') . '/behaviours' . '">' . __('Display public behaviours') . '</a></p>';
 
         return $str;
     }
@@ -322,7 +323,7 @@ class SysInfo
     public static function URLHandlers(): string
     {
         // Récupération des types d'URL enregistrées
-        $urls = dotclear()->url()->getTypes();
+        $urls = App::core()->url()->getTypes();
 
         // Tables des URLs non gérées par le menu
         //$excluded = ['rsd','xmlrpc','preview','trackback','feed','spamfeed','hamfeed','pagespreview','tag_feed'];
@@ -361,7 +362,7 @@ class SysInfo
     public static function adminURLs(): string
     {
         // Récupération de la liste des URLs d'admin enregistrées
-        $urls = dotclear()->adminurl()->dump();
+        $urls = App::core()->adminurl()->dump();
 
         $str = '<table id="urls" class="sysinfo"><caption>' . __('Admin registered URLs') . '</caption>' .
             '<thead><tr><th scope="col" class="nowrap">' . __('Name') . '</th>' .
@@ -431,24 +432,24 @@ class SysInfo
         $tplset = self::publicPrepend();
 
         $document_root = (!empty($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '');
-        $cache_path    = Path::real(dotclear()->config()->get('cache_dir'));
+        $cache_path    = Path::real(App::core()->config()->get('cache_dir'));
         if (substr($cache_path, 0, strlen($document_root)) == $document_root) {
             $cache_path = substr($cache_path, strlen($document_root));
-        } elseif (substr($cache_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
-            $cache_path = substr($cache_path, strlen(dotclear()->config()->get('root_dir')));
+        } elseif (substr($cache_path, 0, strlen(App::core()->config()->get('root_dir'))) == App::core()->config()->get('root_dir')) {
+            $cache_path = substr($cache_path, strlen(App::core()->config()->get('root_dir')));
         }
-        $blog_host = dotclear()->blog()->host;
+        $blog_host = App::core()->blog()->host;
         if (substr($blog_host, -1) != '/') {
             $blog_host .= '/';
         }
-        $blog_url = dotclear()->blog()->url;
+        $blog_url = App::core()->blog()->url;
         if (substr($blog_url, 0, strlen($blog_host)) == $blog_host) {
             $blog_url = substr($blog_url, strlen($blog_host));
         }
 
         $paths = self::$template->getPath();
 
-        $str = '<form action="' . dotclear()->adminurl()->get('admin.plugin.SysInfo') . '" method="post" id="tplform">' .
+        $str = '<form action="' . App::core()->adminurl()->get('admin.plugin.SysInfo') . '" method="post" id="tplform">' .
             '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('List of compiled templates in cache') . ' ' . $cache_path . '/cbtpl' . '</caption>' .
             '<thead>' .
@@ -471,8 +472,8 @@ class SysInfo
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
-            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
-                $sub_path = substr($sub_path, strlen(dotclear()->config()->get('root_dir')));
+            } elseif (substr($sub_path, 0, strlen(App::core()->config()->get('root_dir'))) == App::core()->config()->get('root_dir')) {
+                $sub_path = substr($sub_path, strlen(App::core()->config()->get('root_dir')));
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
@@ -489,7 +490,7 @@ class SysInfo
                                 $stack[]        = $file;
                                 $cache_file     = md5($md5_path . '/' . $file) . '.php';
                                 $cache_subpath  = sprintf('%s/%s', substr($cache_file, 0, 2), substr($cache_file, 2, 2));
-                                $cache_fullpath = Path::real(dotclear()->config()->get('cache_dir')) . '/cbtpl/' . $cache_subpath;
+                                $cache_fullpath = Path::real(App::core()->config()->get('cache_dir')) . '/cbtpl/' . $cache_subpath;
                                 $file_check     = $cache_fullpath . '/' . $cache_file;
                                 $file_exists    = File_exists($file_check);
                                 // $file_url       = Http::getHost() . $cache_path . '/cbtpl/' . $cache_subpath . '/' . $cache_file;
@@ -522,7 +523,7 @@ class SysInfo
         $str .= '</tbody></table>' .
             '<div class="two-cols">' .
             '<p class="col checkboxes-helpers"></p>' .
-            '<p class="col right">' . dotclear()->nonce()->form() . '<input type="submit" class="delete" id="deltplaction" name="deltplaction" value="' . __('Delete selected cache files') . '" /></p>' .
+            '<p class="col right">' . App::core()->nonce()->form() . '<input type="submit" class="delete" id="deltplaction" name="deltplaction" value="' . __('Delete selected cache files') . '" /></p>' .
             '</div>' .
             '</form>';
 
@@ -544,7 +545,7 @@ class SysInfo
                 if (empty($_POST['tpl'])) {
                     throw new \Exception(__('No cache file selected'));
                 }
-                $root_cache = Path::real(dotclear()->config()->get('cache_dir')) . '/cbtpl/';
+                $root_cache = Path::real(App::core()->config()->get('cache_dir')) . '/cbtpl/';
                 foreach ($_POST['tpl'] as $k => $v) {
                     $cache_file = $root_cache . sprintf('%s/%s', substr($v, 0, 2), substr($v, 2, 2)) . '/' . $v;
                     if (file_exists($cache_file)) {
@@ -553,11 +554,11 @@ class SysInfo
                 }
             } catch (\Exception $e) {
                 $checklist = 'templates';
-                dotclear()->error()->add($e->getMessage());
+                App::core()->error()->add($e->getMessage());
             }
-            if (!dotclear()->error()->flag()) {
-                dotclear()->notice()->addSuccessNotice(__('Selected cache files have been deleted.'));
-                dotclear()->adminurl()->redirect('admin.plugin.SysInfo', ['tpl' => 1]);
+            if (!App::core()->error()->flag()) {
+                App::core()->notice()->addSuccessNotice(__('Selected cache files have been deleted.'));
+                App::core()->adminurl()->redirect('admin.plugin.SysInfo', ['tpl' => 1]);
             }
         }
     }
@@ -596,8 +597,8 @@ class SysInfo
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
-            } elseif (substr($sub_path, 0, strlen(dotclear()->config()->get('root_dir'))) == dotclear()->config()->get('root_dir')) {
-                $sub_path = substr($sub_path, strlen(dotclear()->config()->get('root_dir')));
+            } elseif (substr($sub_path, 0, strlen(App::core()->config()->get('root_dir'))) == App::core()->config()->get('root_dir')) {
+                $sub_path = substr($sub_path, strlen(App::core()->config()->get('root_dir')));
                 if (substr($sub_path, 0, 1) == '/') {
                     $sub_path = substr($sub_path, 1);
                 }
@@ -606,7 +607,7 @@ class SysInfo
         }
         $str .= '</tbody></table>';
 
-        $str .= '<p><a id="sysinfo-preview" href="' . dotclear()->blog()->url . dotclear()->url()->getURLFor('sysinfo') . '/templatetags' . '">' . __('Display template tags') . '</a></p>';
+        $str .= '<p><a id="sysinfo-preview" href="' . App::core()->blog()->url . App::core()->url()->getURLFor('sysinfo') . '/templatetags' . '">' . __('Display template tags') . '</a></p>';
 
         return $str;
     }
@@ -623,7 +624,7 @@ class SysInfo
      */
     private static function repoModules(bool $use_cache, string $url, string $title, string $label): string
     {
-        $cache_path = Path::real(dotclear()->config()->get('cache_dir'));
+        $cache_path = Path::real(App::core()->config()->get('cache_dir'));
         $xml_url    = $url;
         $in_cache   = false;
 
@@ -641,7 +642,7 @@ class SysInfo
                 $in_cache = true;
             }
         }
-        $parser    = RepositoryReader::quickParse($xml_url, dotclear()->config()->get('cache_dir'), !$in_cache);
+        $parser    = RepositoryReader::quickParse($xml_url, App::core()->config()->get('cache_dir'), !$in_cache);
         $raw_datas = !$parser ? [] : $parser->getModules();
         Lexical::lexicalKeySort($raw_datas);
 
@@ -680,7 +681,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            dotclear()->blog()->settings()->get('system')->get('store_plugin_url'),
+            App::core()->blog()->settings()->get('system')->get('store_plugin_url'),
             __('Repository plugins list'),
             __('Plugin ID')
         );
@@ -697,7 +698,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            dotclear()->blog()->settings()->get('system')->get('store_theme_url'),
+            App::core()->blog()->settings()->get('system')->get('store_theme_url'),
             __('Repository themes list'),
             __('Theme ID')
         );
@@ -730,23 +731,23 @@ class SysInfo
             '<ul>' .
             '<li>' . __('PHP Version: ') . '<strong>' . phpversion() . '</strong></li>' .
             '<li>' .
-                __('DB driver: ') . '<strong>' . dotclear()->con()->driver() . '</strong> ' .
-                __('version') . ' <strong>' . dotclear()->con()->version() . '</strong> ' .
-                sprintf(__('using <strong>%s</strong> syntax'), dotclear()->con()->syntax()) . '</li>' .
+                __('DB driver: ') . '<strong>' . App::core()->con()->driver() . '</strong> ' .
+                __('version') . ' <strong>' . App::core()->con()->version() . '</strong> ' .
+                sprintf(__('using <strong>%s</strong> syntax'), App::core()->con()->syntax()) . '</li>' .
             '</ul>' .
             '</details>';
 
         // Dotclear info
         $dotclear = '<details open><summary>' . __('Dotclear info') . '</summary>' .
             '<ul>' .
-            '<li>' . __('Dotclear version: ') . '<strong>' . dotclear()->config()->get('core_version') . '</strong></li>' .
+            '<li>' . __('Dotclear version: ') . '<strong>' . App::core()->config()->get('core_version') . '</strong></li>' .
             '</ul>' .
             '</details>';
 
         // Update info
 
         $versions = '';
-        $path     = Path::real(dotclear()->config()->get('cache_dir') . '/versions');
+        $path     = Path::real(App::core()->config()->get('cache_dir') . '/versions');
         if (is_dir($path)) {
             $channels = ['stable', 'testing', 'unstable'];
             foreach ($channels as $channel) {
@@ -784,12 +785,12 @@ class SysInfo
      */
     private static function publicPrepend(): string
     {
-        $path = dotclear()->themes()->getThemePath('templates/tpl');
+        $path = App::core()->themes()->getThemePath('templates/tpl');
 
-        self::$template    = new Template(dotclear()->config()->get('cache_dir'), __CLASS__ . '::$template');
+        self::$template    = new Template(App::core()->config()->get('cache_dir'), __CLASS__ . '::$template');
 
         # Check templateset and add all path to tpl
-        $tplset = dotclear()->themes()->getModule(array_key_last($path))->templateset();
+        $tplset = App::core()->themes()->getModule(array_key_last($path))->templateset();
         if (!empty($tplset)) {
             $tplset_dir = Path::implodeRoot('Process', 'Public', 'templates', $tplset);
             if (is_dir($tplset_dir)) {
@@ -803,7 +804,7 @@ class SysInfo
         }
 
         // Looking for default-templates in each plugin's dir
-        foreach (dotclear()->plugins()->getModules() as $id => $module) {
+        foreach (App::core()->plugins()->getModules() as $id => $module) {
             $plugin_tpl = Path::real($module->root() . '/templates/' . $tplset);
             if (!empty($plugin_tpl) && is_dir($plugin_tpl)) {
                 self::$template->setPath(self::$template->getPath(), $plugin_tpl);
@@ -837,7 +838,7 @@ class SysInfo
 
         ];
 
-        if (dotclear()->plugins()->hasModule('StaticCache')) {
+        if (App::core()->plugins()->hasModule('StaticCache')) {
             $constants['DC_SC_CACHE_ENABLE']    = defined('DC_SC_CACHE_ENABLE') ? (DC_SC_CACHE_ENABLE ? __('yes') : __('no')) : $undefined;
             $constants['DC_SC_CACHE_DIR']       = defined('DC_SC_CACHE_DIR') ? DC_SC_CACHE_DIR : $undefined;
             $constants['DC_SC_CACHE_BLOGS_ON']  = defined('DC_SC_CACHE_BLOGS_ON') ? DC_SC_CACHE_BLOGS_ON : $undefined;
@@ -852,22 +853,22 @@ class SysInfo
     {
         // Check generic Dotclear folders
         $folders = [
-            'root'     => dotclear()->config()->get('root_dir'),
+            'root'     => App::core()->config()->get('root_dir'),
             'config'   => DOTCLEAR_CONFIG_PATH,
             'cache'    => [
-                dotclear()->config()->get('cache_dir'),
-                dotclear()->config()->get('cache_dir') . '/cbfeed',
-                dotclear()->config()->get('cache_dir') . '/cbtpl',
-                dotclear()->config()->get('cache_dir') . '/dcrepo',
-                dotclear()->config()->get('cache_dir') . '/versions',
+                App::core()->config()->get('cache_dir'),
+                App::core()->config()->get('cache_dir') . '/cbfeed',
+                App::core()->config()->get('cache_dir') . '/cbtpl',
+                App::core()->config()->get('cache_dir') . '/dcrepo',
+                App::core()->config()->get('cache_dir') . '/versions',
             ],
-            'digest'   => dotclear()->config()->get('digests_dir'),
-            'l10n'     => dotclear()->config()->get('l10n_dir'),
-            'plugins'  => dotclear()->plugins()?->getModulesPath() ?? [],
-            'themes'   => dotclear()->themes()?->getModulesPath() ?? [],
-            'iconsets' => dotclear()->iconsets()?->getModulesPath() ?? [],
-            'public'   => dotclear()->blog()->public_path,
-            'var'      => dotclear()->config()->get('var_dir'),
+            'digest'   => App::core()->config()->get('digests_dir'),
+            'l10n'     => App::core()->config()->get('l10n_dir'),
+            'plugins'  => App::core()->plugins()?->getModulesPath() ?? [],
+            'themes'   => App::core()->themes()?->getModulesPath() ?? [],
+            'iconsets' => App::core()->iconsets()?->getModulesPath() ?? [],
+            'public'   => App::core()->blog()->public_path,
+            'var'      => App::core()->config()->get('var_dir'),
         ];
 
         if (defined('DC_SC_CACHE_DIR')) {
@@ -916,8 +917,8 @@ class SysInfo
                     $status .= '<div style="display: none;"><p>' . implode('<br />', $err) . '</p></div>';
                 }
 /*
-                if (substr($folder, 0, strlen(dotclear()->config()->get('root_dir'))) === dotclear()->config()->get('root_dir')) {
-                    $folder = substr_replace($folder, '<code>DOTCLEAR_ROOT_DIR</code> ', 0, strlen(dotclear()->config()->get('root_dir')));
+                if (substr($folder, 0, strlen(App::core()->config()->get('root_dir'))) === App::core()->config()->get('root_dir')) {
+                    $folder = substr_replace($folder, '<code>DOTCLEAR_ROOT_DIR</code> ', 0, strlen(App::core()->config()->get('root_dir')));
                 }
 */
                 $str .= '<tr>' .
@@ -945,7 +946,7 @@ class SysInfo
      */
     public static function staticCache()
     {
-        $blog_host = dotclear()->blog()->host;
+        $blog_host = App::core()->blog()->host;
         if (substr($blog_host, -1) != '/') {
             $blog_host .= '/';
         }
@@ -966,13 +967,13 @@ class SysInfo
         // Add a static cache URL convertor
         $str = '<p class="fieldset">' .
             '<label for="sccalc_url" class="classic">' . __('URL:') . '</label>' . ' ' .
-            Form::field('sccalc_url', 50, 255, Html::escapeHTML(dotclear()->blog()->url)) . ' ' .
+            Form::field('sccalc_url', 50, 255, Html::escapeHTML(App::core()->blog()->url)) . ' ' .
             '<input type="button" id="getscaction" name="getscaction" value="' . __(' → ') . '" />' .
             ' <span id="sccalc_res"></span><a id="sccalc_preview" href="#" data-dir="' . $cache_dir . '"></a>' .
             '</p>';
 
         // List of existing cache files
-        $str .= '<form action="' . dotclear()->adminurl()->get('admin.plugin.SysInfo') . '" method="post" id="scform">';
+        $str .= '<form action="' . App::core()->adminurl()->get('admin.plugin.SysInfo') . '" method="post" id="scform">';
 
         $str .= '<table id="chk-table-result" class="sysinfo">';
         $str .= '<caption>' . __('List of static cache files in') . ' ' . substr($cache_dir, strlen($cache_root)) .
@@ -1007,7 +1008,7 @@ class SysInfo
         $str .= '</tbody></table>';
         $str .= '<div class="two-cols">' .
             '<p class="col checkboxes-helpers"></p>' .
-            '<p class="col right">' . dotclear()->nonce()->form() . '<input type="submit" class="delete" id="delscaction" name="delscaction" value="' . __('Delete selected cache files') . '" /></p>' .
+            '<p class="col right">' . App::core()->nonce()->form() . '<input type="submit" class="delete" id="delscaction" name="delscaction" value="' . __('Delete selected cache files') . '" /></p>' .
             '</div>' .
             '</form>';
 
@@ -1036,11 +1037,11 @@ class SysInfo
                 }
             } catch (\Exception $e) {
                 $checklist = 'sc';
-                dotclear()->error()->add($e->getMessage());
+                App::core()->error()->add($e->getMessage());
             }
-            if (!dotclear()->error()->flag()) {
-                dotclear()->notice()->addSuccessNotice(__('Selected cache files have been deleted.'));
-                dotclear()->adminurl()->redirect('admin.plugin.SysInfo', ['sc' => 1]);
+            if (!App::core()->error()->flag()) {
+                App::core()->notice()->addSuccessNotice(__('Selected cache files have been deleted.'));
+                App::core()->adminurl()->redirect('admin.plugin.SysInfo', ['sc' => 1]);
             }
         }
     }

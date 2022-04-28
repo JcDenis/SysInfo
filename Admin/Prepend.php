@@ -16,6 +16,7 @@ namespace Dotclear\Plugin\SysInfo\Admin;
 
 use ArrayObject;
 
+use Dotclear\App;
 use Dotclear\Module\AbstractPrepend;
 use Dotclear\Module\TraitPrependAdmin;
 use Dotclear\Plugin\SysInfo\Admin\SysInfoRest;
@@ -41,7 +42,7 @@ class Prepend extends AbstractPrepend
 
     public function installModule(): ?bool
     {
-        dotclear()->blog()->settings()->get('sysinfo')->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
+        App::core()->blog()->settings()->get('sysinfo')->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
 
         return true;
     }

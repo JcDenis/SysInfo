@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Common;
 
+use Dotclear\App;
 use Dotclear\Core\Url\Url;
 
 class SysInfoUrl extends Url
 {
     public function __construct()
     {
-        dotclear()->url()->register('sysinfo', 'sysinfo', '^sysinfo(?:/(.+))?$', [$this, 'sysInfo']);
+        App::core()->url()->register('sysinfo', 'sysinfo', '^sysinfo(?:/(.+))?$', [$this, 'sysInfo']);
     }
 
     public function sysInfo($args)
@@ -18,20 +19,20 @@ class SysInfoUrl extends Url
             $this->sysInfoServeDocument($args);
         }
 
-        dotclear()->url()->p404();
+        App::core()->url()->p404();
         exit;
     }
 
     private function sysInfoServeDocument(string $doc): void
     {
-            $module = dotclear()->themes()->getModule(dotclear()->blog()->settings()->get('system')->get('theme'));
+            $module = App::core()->themes()->getModule(App::core()->blog()->settings()->get('system')->get('theme'));
             $tplset = $module ? $module->templateset() : null;
             if (!empty($tplset) && is_dir(__DIR__ . '/../templates/' . $tplset)) {
-                dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . $tplset);
+                App::core()->template()->setPath(App::core()->template()->getPath(), __DIR__ . '/../templates/' . $tplset);
             } else {
-                dotclear()->template()->setPath(dotclear()->template()->getPath(), __DIR__ . '/../templates/' . dotclear()->config()->get('template_default'));
+                App::core()->template()->setPath(App::core()->template()->getPath(), __DIR__ . '/../templates/' . App::core()->config()->get('template_default'));
             }
-            dotclear()->url()->serveDocument($doc . '.html');
+            App::core()->url()->serveDocument($doc . '.html');
             exit;
     }
 }

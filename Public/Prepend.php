@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Public;
 
+use Dotclear\App;
 use Dotclear\Module\AbstractPrepend;
 use Dotclear\Module\TraitPrependPublic;
 use Dotclear\Plugin\SysInfo\Public\SysInfoTemplate;
@@ -25,12 +26,12 @@ class Prepend extends AbstractPrepend
 
     public function loadModule(): void
     {
-        dotclear()->behavior()->add('publicBreadcrumb', function ($context, $separator): string {
+        App::core()->behavior()->add('publicBreadcrumb', function ($context, $separator): string {
             return $context == 'sysinfo' ? __('System Information') : '';
         });
 
-        dotclear()->behavior()->add('urlHandlerBeforeGetData', function ($ctx): void {
-                $ctx->http_cache = (bool) dotclear()->blog()->settings()->get('sysinfo')->get('http_cache');
+        App::core()->behavior()->add('urlHandlerBeforeGetData', function ($ctx): void {
+                $ctx->http_cache = (bool) App::core()->blog()->settings()->get('sysinfo')->get('http_cache');
         });
 
         new SysInfoTemplate();

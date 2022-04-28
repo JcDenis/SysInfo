@@ -14,16 +14,18 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Admin;
 
+use Dotclear\App;
+
 class SysInfoRest
 {
     # Register REST methods
     public function __construct()
     {
-        dotclear()->rest()->addFunction('getCompiledTemplate', [$this, 'getCompiledTemplate']);
-        dotclear()->rest()->addFunction('getStaticCacheFile', [$this, 'getStaticCacheFile']);
-        dotclear()->rest()->addFunction('getStaticCacheDir', [$this, 'getStaticCacheDir']);
-        dotclear()->rest()->addFunction('getStaticCacheList', [$this, 'getStaticCacheList']);
-        dotclear()->rest()->addFunction('getStaticCacheName', [$this, 'getStaticCacheName']);
+        App::core()->rest()->addFunction('getCompiledTemplate', [$this, 'getCompiledTemplate']);
+        App::core()->rest()->addFunction('getStaticCacheFile', [$this, 'getStaticCacheFile']);
+        App::core()->rest()->addFunction('getStaticCacheDir', [$this, 'getStaticCacheDir']);
+        App::core()->rest()->addFunction('getStaticCacheList', [$this, 'getStaticCacheList']);
+        App::core()->rest()->addFunction('getStaticCacheName', [$this, 'getStaticCacheName']);
     }
 
     public function getCompiledTemplate($core, $get)
@@ -178,7 +180,7 @@ class SysInfoRest
         $content = '';
 
         // Extract REQUEST_URI from URL if possible
-        $blog_host = dotclear()->blog()->host;
+        $blog_host = App::core()->blog()->host;
         if (substr($url, 0, strlen($blog_host)) == $blog_host) {
             $url = substr($url, strlen($blog_host));
         }

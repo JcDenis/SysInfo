@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\SysInfo\Admin;
 
+use Dotclear\App;
 use Dotclear\Helper\Html\Form;
 use Dotclear\Module\AbstractPage;
 use Dotclear\Plugin\SysInfo\Admin\SysInfo;
@@ -65,7 +66,7 @@ class Handler extends AbstractPage
             ],
         ];
 
-        if (dotclear()->plugins()?->hasModule('staticCache')) {
+        if (App::core()->plugins()?->hasModule('staticCache')) {
             if (defined('DC_SC_CACHE_ENABLE') && DC_SC_CACHE_ENABLE) {
                 if (defined('DC_SC_CACHE_DIR')) {
                     if (dcStaticCacheControl::cacheCurrentBlog()) {
@@ -88,10 +89,10 @@ class Handler extends AbstractPage
                 __('System Information') => '',
             ])
             ->setPageHead(
-                dotclear()->resource()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', dotclear()->version()->get('sysInfo')) .
-                dotclear()->resource()->json('sysinfo', [
-                    'colorsyntax'       => dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax'),
-                    'colorsyntax_theme' => dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'),
+                App::core()->resource()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', App::core()->version()->get('sysInfo')) .
+                App::core()->resource()->json('sysinfo', [
+                    'colorsyntax'       => App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax'),
+                    'colorsyntax_theme' => App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'),
                     'msg'               => [
                         'confirm_del_tpl' => __('Are you sure you want to remove selected template cache files?'),
                         'confirm_del_sc'  => __('Are you sure you want to remove selected static cache files?'),
@@ -99,14 +100,14 @@ class Handler extends AbstractPage
                         'sc_not_found'    => __('Static cache file not found or unreadable'),
                     ],
                 ]) .
-                dotclear()->resource()->modal() .
-                dotclear()->resource()->load('sysinfo.js', 'Plugin', 'SysInfo', null, dotclear()->version()->get('sysInfo'))
+                App::core()->resource()->modal() .
+                App::core()->resource()->load('sysinfo.js', 'Plugin', 'SysInfo', null, App::core()->version()->get('sysInfo'))
             )
         ;
 
-        if (dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax')) {
+        if (App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax')) {
             $this->setPageHead(
-                dotclear()->resource()->loadCodeMirror(dotclear()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'))
+                App::core()->resource()->loadCodeMirror(App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'))
             );
         }
 
@@ -122,10 +123,10 @@ class Handler extends AbstractPage
     protected function getPageContent(): void
     {
         echo
-        '<form action="' . dotclear()->adminurl()->get('admin.plugin.SysInfo') . '" method="post">' .
+        '<form action="' . App::core()->adminurl()->get('admin.plugin.SysInfo') . '" method="post">' .
         '<p class="field"><label for="checklist">' . __('Select a checklist:') . '</label> ' .
         form::combo('checklist', $this->si_checklists, $this->si_checklist) . ' ' .
-        dotclear()->nonce()->form() . '<input type="submit" value="' . __('Check') . '" /></p>' .
+        App::core()->nonce()->form() . '<input type="submit" value="' . __('Check') . '" /></p>' .
         '</form>';
 
         # Display required information
