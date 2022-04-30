@@ -823,10 +823,8 @@ class SysInfo
     {
         $undefined = '<!-- undefined -->';
         $constants = [
-            'DOTCLEAR_ROOT_DIR' => defined('DOTCLEAR_ROOT_DIR') ? DOTCLEAR_ROOT_DIR : $undefined, 
             'DOTCLEAR_ERROR_FILE' => defined('DOTCLEAR_ERROR_FILE') ? DOTCLEAR_ERROR_FILE : $undefined, 
             'DOTCLEAR_BEHAVIOR_TRACE' => defined('DOTCLEAR_BEHAVIOR_TRACE') ? (DOTCLEAR_BEHAVIOR_TRACE ? __('yes') : __('no')) : $undefined,
-            'DOTCLEAR_CONFIG_PATH' => defined('DOTCLEAR_CONFIG_PATH') ? DOTCLEAR_CONFIG_PATH : $undefined, 
             'DOTCLEAR_AUTH_SESS_UID' => defined('DOTCLEAR_AUTH_SESS_UID') ? DOTCLEAR_AUTH_SESS_UID : $undefined,
             'DOTCLEAR_SCH_CLASS' => defined('DOTCLEAR_SCH_CLASS') ? DOTCLEAR_SCH_CLASS : $undefined,
             'DOTCLEAR_CON_CLASS' => defined('DOTCLEAR_CON_CLASS') ? DOTCLEAR_CON_CLASS : $undefined,
@@ -853,8 +851,8 @@ class SysInfo
     {
         // Check generic Dotclear folders
         $folders = [
-            'root'     => App::core()->config()->get('root_dir'),
-            'config'   => DOTCLEAR_CONFIG_PATH,
+            'root'     => Path::implodeBase(),
+            'config'   => Path::implodeBase(),
             'cache'    => [
                 App::core()->config()->get('cache_dir'),
                 App::core()->config()->get('cache_dir') . '/cbfeed',
