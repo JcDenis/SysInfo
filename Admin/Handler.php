@@ -16,8 +16,8 @@ namespace Dotclear\Plugin\SysInfo\Admin;
 
 use Dotclear\App;
 use Dotclear\Helper\Html\Form;
-use Dotclear\Module\AbstractPage;
 use Dotclear\Plugin\SysInfo\Admin\SysInfo;
+use Dotclear\Process\Admin\Page\AbstractPage;
 
 class Handler extends AbstractPage
 {

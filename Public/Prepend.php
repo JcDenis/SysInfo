@@ -15,15 +15,12 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\SysInfo\Public;
 
 use Dotclear\App;
-use Dotclear\Module\AbstractPrepend;
-use Dotclear\Module\TraitPrependPublic;
+use Dotclear\Modules\ModulePrepend;
 use Dotclear\Plugin\SysInfo\Public\SysInfoTemplate;
 use Dotclear\Plugin\SysInfo\Common\SysInfoUrl;
 
-class Prepend extends AbstractPrepend
+class Prepend extends ModulePrepend
 {
-    use TraitPrependPublic;
-
     public function loadModule(): void
     {
         App::core()->behavior()->add('publicBreadcrumb', function ($context, $separator): string {

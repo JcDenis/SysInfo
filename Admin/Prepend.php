@@ -17,15 +17,12 @@ namespace Dotclear\Plugin\SysInfo\Admin;
 use ArrayObject;
 
 use Dotclear\App;
-use Dotclear\Module\AbstractPrepend;
-use Dotclear\Module\TraitPrependAdmin;
+use Dotclear\Modules\ModulePrepend;
 use Dotclear\Plugin\SysInfo\Admin\SysInfoRest;
 use Dotclear\Plugin\SysInfo\Common\SysInfoUrl;
 
-class Prepend extends AbstractPrepend
+class Prepend extends ModulePrepend
 {
-    use TraitPrependAdmin;
-
     public function loadModule(): void
     {
         # dead but useful code, in order to have translations
