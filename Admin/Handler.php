@@ -24,9 +24,9 @@ class Handler extends AbstractPage
     private $si_checklists = [];
     private $si_checklist  = '';
 
-    protected function getPermissions(): string|null|false
+    protected function getPermissions(): string|bool
     {
-        return null;
+        return '';
     }
 
     protected function getPagePrepend(): ?bool
