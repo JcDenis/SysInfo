@@ -22,7 +22,7 @@ use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Lexical;
-use Dotclear\Module\Store\Repository\RepositoryReader;
+use Dotclear\Modules\Repository\RepositoryReader;
 use Dotclear\Process\Public\Template\Template;
 
 class SysInfo
@@ -862,9 +862,9 @@ class SysInfo
             ],
             'digest'   => App::core()->config()->get('digests_dir'),
             'l10n'     => App::core()->config()->get('l10n_dir'),
-            'plugins'  => App::core()->plugins()?->getModulesPath() ?? [],
-            'themes'   => App::core()->themes()?->getModulesPath() ?? [],
-            'iconsets' => App::core()->iconsets()?->getModulesPath() ?? [],
+            'plugins'  => App::core()->plugins()->getPaths() ?? [],
+            'themes'   => App::core()->themes()->getPaths() ?? [],
+            'iconsets' => App::core()->iconsets()->getPaths() ?? [],
             'public'   => App::core()->blog()->public_path,
             'var'      => App::core()->config()->get('var_dir'),
         ];
