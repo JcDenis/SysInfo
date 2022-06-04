@@ -20,6 +20,7 @@ use Dotclear\Helper\Html\Form;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
+use Dotclear\Helper\GPC\GPC;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Lexical;
 use Dotclear\Modules\Repository\RepositoryReader;
@@ -539,14 +540,14 @@ class SysInfo
      */
     public static function doFormTemplates(string &$checklist)
     {
-        if (!empty($_POST['deltplaction'])) {
+        if (!GPC::post()->empty('deltplaction')) {
             // Cope with cache file deletion
             try {
-                if (empty($_POST['tpl'])) {
+                if (GPC::post()->empty('tpl')) {
                     throw new \Exception(__('No cache file selected'));
                 }
                 $root_cache = Path::real(App::core()->config()->get('cache_dir')) . '/cbtpl/';
-                foreach ($_POST['tpl'] as $k => $v) {
+                foreach (GPC::post()->array('tpl') as $k => $v) {
                     $cache_file = $root_cache . sprintf('%s/%s', substr($v, 0, 2), substr($v, 2, 2)) . '/' . $v;
                     if (file_exists($cache_file)) {
                         unlink($cache_file);
@@ -565,7 +566,7 @@ class SysInfo
 
     public static function doCheckTemplates(string &$checklist)
     {
-        if (!empty($_GET['tpl'])) {
+        if (!GPC::get()->empty('tpl')) {
             $checklist = 'templates';
         }
     }
@@ -681,7 +682,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            App::core()->blog()->settings()->get('system')->get('store_plugin_url'),
+            App::core()->blog()->settings()->getGroup('system')->getSetting('store_plugin_url'),
             __('Repository plugins list'),
             __('Plugin ID')
         );
@@ -698,7 +699,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            App::core()->blog()->settings()->get('system')->get('store_theme_url'),
+            App::core()->blog()->settings()->getGroup('system')->getSetting('store_theme_url'),
             __('Repository themes list'),
             __('Theme ID')
         );
@@ -792,7 +793,7 @@ class SysInfo
         # Check templateset and add all path to tpl
         $tplset = App::core()->themes()->getModule(array_key_last($path))->templateset();
         if (!empty($tplset)) {
-            $tplset_dir = Path::implodeRoot('Process', 'Public', 'templates', $tplset);
+            $tplset_dir = Path::implodeSrc('Process', 'Public', 'templates', $tplset);
             if (is_dir($tplset_dir)) {
                 self::$template->setPath($path, $tplset_dir, self::$template->getPath());
             } else {
@@ -824,7 +825,6 @@ class SysInfo
         $undefined = '<!-- undefined -->';
         $constants = [
             'DOTCLEAR_ERROR_FILE' => defined('DOTCLEAR_ERROR_FILE') ? DOTCLEAR_ERROR_FILE : $undefined, 
-            'DOTCLEAR_BEHAVIOR_TRACE' => defined('DOTCLEAR_BEHAVIOR_TRACE') ? (DOTCLEAR_BEHAVIOR_TRACE ? __('yes') : __('no')) : $undefined,
             'DOTCLEAR_AUTH_SESS_UID' => defined('DOTCLEAR_AUTH_SESS_UID') ? DOTCLEAR_AUTH_SESS_UID : $undefined,
             'DOTCLEAR_SCH_CLASS' => defined('DOTCLEAR_SCH_CLASS') ? DOTCLEAR_SCH_CLASS : $undefined,
             'DOTCLEAR_CON_CLASS' => defined('DOTCLEAR_CON_CLASS') ? DOTCLEAR_CON_CLASS : $undefined,
@@ -864,7 +864,6 @@ class SysInfo
             'l10n'     => App::core()->config()->get('l10n_dir'),
             'plugins'  => App::core()->plugins()->getPaths() ?? [],
             'themes'   => App::core()->themes()->getPaths() ?? [],
-            'iconsets' => App::core()->iconsets()->getPaths() ?? [],
             'public'   => App::core()->blog()->public_path,
             'var'      => App::core()->config()->get('var_dir'),
         ];
@@ -1022,13 +1021,13 @@ class SysInfo
      */
     public static function doFormStaticCache(string &$checklist)
     {
-        if (!empty($_POST['delscaction'])) {
+        if (!GPC::post()->empty('delscaction')) {
             // Cope with static cache file deletion
             try {
-                if (empty($_POST['sc'])) {
+                if (GPC::post()->empty('sc')) {
                     throw new \Exception(__('No cache file selected'));
                 }
-                foreach ($_POST['sc'] as $k => $cache_file) {
+                foreach (GPC::post()->array('sc') as $k => $cache_file) {
                     if (file_exists($cache_file)) {
                         unlink($cache_file);
                     }
@@ -1046,7 +1045,7 @@ class SysInfo
 
     public static function doCheckStaticCache(string &$checklist)
     {
-        if (!empty($_GET['sc'])) {
+        if (!GPC::get()->empty('sc')) {
             $checklist = 'sc';
         }
     }

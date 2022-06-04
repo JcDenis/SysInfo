@@ -39,7 +39,7 @@ class Prepend extends ModulePrepend
 
     public function installModule(): ?bool
     {
-        App::core()->blog()->settings()->get('sysinfo')->put('http_cache', true, 'boolean', 'HTTP cache', false, true);
+        App::core()->blog()->settings()->getGroup('sysinfo')->putSetting('http_cache', true, 'boolean', 'HTTP cache', false, true);
 
         return true;
     }

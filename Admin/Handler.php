@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\SysInfo\Admin;
 
 use Dotclear\App;
+use Dotclear\Helper\GPC\GPC;
 use Dotclear\Helper\Html\Form;
 use Dotclear\Plugin\SysInfo\Admin\SysInfo;
 use Dotclear\Process\Admin\Page\AbstractPage;
@@ -78,7 +79,7 @@ class Handler extends AbstractPage
             }
         }
 
-        $this->si_checklist = !empty($_POST['checklist']) ? $_POST['checklist'] : '';
+        $this->si_checklist = GPC::post()->string('checklist');
 
 
         # Page setup
