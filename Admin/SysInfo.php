@@ -324,7 +324,7 @@ class SysInfo
     public static function URLHandlers(): string
     {
         // Récupération des types d'URL enregistrées
-        $urls = App::core()->url()->getTypes();
+        $urls = App::core()->url()->getHandlers();
 
         // Tables des URLs non gérées par le menu
         //$excluded = ['rsd','xmlrpc','preview','trackback','feed','spamfeed','hamfeed','pagespreview','tag_feed'];
@@ -340,12 +340,12 @@ class SysInfo
             '<td>' . '' . '</td>' .
             '<td class="maximal"><code>' . '^$' . '</code></td>' .
             '</tr>';
-        foreach ($urls as $type => $param) {
-            if (!in_array($type, $excluded)) {
+        foreach ($urls as $handler) {
+            if (!in_array($handler->type, $excluded)) {
                 $str .= '<tr>' .
-                    '<td scope="row">' . $type . '</td>' .
-                    '<td>' . $param['url'] . '</td>' .
-                    '<td class="maximal"><code>' . $param['representation'] . '</code></td>' .
+                    '<td scope="row">' . $handler->type . '</td>' .
+                    '<td>' . $handler->url . '</td>' .
+                    '<td class="maximal"><code>' . $handler->representation . '</code></td>' .
                     '</tr>';
             }
         }
