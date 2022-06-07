@@ -37,7 +37,7 @@ class SysInfo
      */
     public static function permissions(): string
     {
-        $permissions = App::core()->user()->getPermissionsTypes();
+        $permissions = App::core()->permissions()->getPermTypes();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Types of permission') . '</caption>' .
@@ -48,10 +48,10 @@ class SysInfo
             '</tr>' .
             '</thead>' .
             '<tbody>';
-        foreach ($permissions as $n => $l) {
+        foreach ($permissions as $p) {
             $str .= '<tr>' .
-                '<td class="nowrap">' . $n . '</td>' .
-                '<td class="maximal">' . __($l) . '</td>' .
+                '<td class="nowrap">' . $p->type . '</td>' .
+                '<td class="maximal">' . $p->label . '</td>' .
                 '</tr>';
         }
         $str .= '</tbody></table>';

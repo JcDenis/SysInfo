@@ -10,7 +10,7 @@ class SysInfoUrl
 {
     public function __construct()
     {
-        App::core()->url()->registerHandler(new UrlDescriptor(type: 'sysinfo', url: 'sysinfo', representation: '^sysinfo(?:/(.+))?$', callback: [$this, 'sysInfo']));
+        App::core()->url()->registerHandler(new UrlDescriptor(type: 'sysinfo', url: 'sysinfo', scheme: '^sysinfo(?:/(.+))?$', callback: [$this, 'sysInfo']));
     }
 
     public function sysInfo($args)
