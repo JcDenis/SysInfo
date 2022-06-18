@@ -37,7 +37,7 @@ class SysInfo
      */
     public static function permissions(): string
     {
-        $permissions = App::core()->permissions()->getPermTypes();
+        $permissions = App::core()->permission()->getItems();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Types of permission') . '</caption>' .
@@ -271,7 +271,7 @@ class SysInfo
     public static function behaviours(): string
     {
         // Affichage de la liste des behaviours inscrits
-        $bl = App::core()->behavior()->dump();
+        $bl = App::core()->behaviors();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Behaviours list') . '</caption>' .
@@ -285,27 +285,26 @@ class SysInfo
         foreach ($bl as $b => $f) {
             $str .= '<tr><td class="nowrap">' . $b . '</td>';
             $newline = false;
-            if (is_array($f)) {
-                foreach ($f as $fi) {
-                    $str .= ($newline ? '</tr><tr><td></td>' : '') . '<td class="maximal"><code>';
-                    if (is_array($fi)) {
-                        if (is_object($fi[0])) {
-                            $str .= get_class($fi[0]) . '-&gt;' . $fi[1];
-                        } else {
-                            $str .= $fi[0] . '::' . $fi[1];
-                        }
+            if (!$f->count()) {
+                $str .= '<td class="maximal"><code></code></td>';
+            }
+            foreach ($f->dump() as $fi) {
+                $str .= ($newline ? '</tr><tr><td></td>' : '') . '<td class="maximal"><code>';
+                if (is_array($fi)) {
+                    if (is_object($fi[0])) {
+                        $str .= get_class($fi[0]) . '-&gt;' . $fi[1];
                     } else {
-                        if ($fi instanceof \Closure) {
-                            $str .= '__closure__';
-                        } else {
-                            $str .= $fi;
-                        }
+                        $str .= $fi[0] . '::' . $fi[1];
                     }
-                    $str .= '()</code></td>';
-                    $newline = true;
+                } else {
+                    if ($fi instanceof \Closure) {
+                        $str .= '__closure__';
+                    } else {
+                        $str .= $fi;
+                    }
                 }
-            } else {
-                $str .= '<td><code>' . $f . '()</code></td>';
+                $str .= '()</code></td>';
+                $newline = true;
             }
             $str .= '</tr>';
         }
@@ -324,7 +323,7 @@ class SysInfo
     public static function URLHandlers(): string
     {
         // Récupération des types d'URL enregistrées
-        $urls = App::core()->url()->getHandlers();
+        $urls = App::core()->url()->getItems();
 
         // Tables des URLs non gérées par le menu
         //$excluded = ['rsd','xmlrpc','preview','trackback','feed','spamfeed','hamfeed','pagespreview','tag_feed'];
@@ -345,7 +344,7 @@ class SysInfo
                 $str .= '<tr>' .
                     '<td scope="row">' . $handler->type . '</td>' .
                     '<td>' . $handler->url . '</td>' .
-                    '<td class="maximal"><code>' . $handler->representation . '</code></td>' .
+                    '<td class="maximal"><code>' . $handler->scheme . '</code></td>' .
                     '</tr>';
             }
         }
@@ -363,18 +362,18 @@ class SysInfo
     public static function adminURLs(): string
     {
         // Récupération de la liste des URLs d'admin enregistrées
-        $urls = App::core()->adminurl()->dump();
+        $urls = App::core()->adminurl()->getItems();
 
         $str = '<table id="urls" class="sysinfo"><caption>' . __('Admin registered URLs') . '</caption>' .
             '<thead><tr><th scope="col" class="nowrap">' . __('Name') . '</th>' .
             '<th scope="col">' . __('Class') . '</th>' .
             '<th scope="col" class="maximal">' . __('Query string') . '</th></tr></thead>' .
             '<tbody>';
-        foreach ($urls as $handler => $v) {
+        foreach ($urls as $handler) {
             $str .= '<tr>' .
-                '<td scope="row" class="nowrap">' . $handler . '</td>' .
-                '<td><code>' . $v['class'] . '</code></td>' .
-                '<td class="maximal"><code>' . http_build_query($v['qs']) . '</code></td>' .
+                '<td scope="row" class="nowrap">' . $handler->name . '</td>' .
+                '<td><code>' . $handler->class . '</code></td>' .
+                '<td class="maximal"><code>' . http_build_query($handler->params) . '</code></td>' .
                 '</tr>';
         }
         $str .= '</tbody>' .

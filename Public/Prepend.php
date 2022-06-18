@@ -23,11 +23,11 @@ class Prepend extends ModulePrepend
 {
     public function loadModule(): void
     {
-        App::core()->behavior()->add('publicBreadcrumb', function ($context, $separator): string {
+        App::core()->behavior('publicBreadcrumb')->add(function ($context, $separator): string {
             return $context == 'sysinfo' ? __('System Information') : '';
         });
 
-        App::core()->behavior()->add('urlHandlerBeforeGetData', function ($ctx): void {
+        App::core()->behavior('urlHandlerBeforeGetData')->add(function ($ctx): void {
                 $ctx->http_cache = (bool) App::core()->blog()->settings()->getGroup('sysinfo')->getSetting('http_cache');
         });
 

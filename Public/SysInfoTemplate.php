@@ -28,30 +28,29 @@ class SysInfoTemplate
     {
         $code = '<ul>' . "\n";
 
-        $bl = App::core()->behavior()->dump();
+        $bl = App::core()->behaviors();
         foreach ($bl as $b => $f) {
             $code .= '<li>' . $b . ' : ';
-            if (is_array($f)) {
-                $code .= "\n" . '<ul>';
-                foreach ($f as $fi) {
-                    $code .= '<li><code>';
-                    if (is_array($fi)) {
-                        if (is_object($fi[0])) {
-                            $code .= get_class($fi[0]) . '-&gt;' . $fi[1] . '()';
-                        } else {
-                            $code .= $fi[0] . '::' . $fi[1] . '()';
-                        }
-                    } elseif ($fi instanceof \Closure) {
-                        $code .= '__Closure__';
-                    } else {
-                        $code .= $fi . '()';
-                    }
-                    $code .= '</code></li>';
-                }
-                $code .= '</ul>' . "\n";
-            } else {
-                $code .= $f . '()';
+            if (!$f->count()) {
+                $code .= '';
             }
+            $code .= "\n" . '<ul>';
+            foreach ($f->dump() as $fi) {
+                $code .= '<li><code>';
+                if (is_array($fi)) {
+                    if (is_object($fi[0])) {
+                        $code .= get_class($fi[0]) . '-&gt;' . $fi[1] . '()';
+                    } else {
+                        $code .= $fi[0] . '::' . $fi[1] . '()';
+                    }
+                } elseif ($fi instanceof \Closure) {
+                    $code .= '__Closure__';
+                } else {
+                    $code .= $fi . '()';
+                }
+                $code .= '</code></li>';
+            }
+            $code .= '</ul>' . "\n";
             $code .= '</li>' . "\n";
         }
         $code .= '</ul>' . "\n";

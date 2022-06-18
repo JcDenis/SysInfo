@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\SysInfo\Common;
 
 use Dotclear\App;
-use Dotclear\Core\Url\UrlDescriptor;
+use Dotclear\Core\Url\UrlItem;
 
 class SysInfoUrl
 {
     public function __construct()
     {
-        App::core()->url()->registerHandler(new UrlDescriptor(type: 'sysinfo', url: 'sysinfo', scheme: '^sysinfo(?:/(.+))?$', callback: [$this, 'sysInfo']));
+        App::core()->url()->addItem(new UrlItem(type: 'sysinfo', url: 'sysinfo', scheme: '^sysinfo(?:/(.+))?$', callback: [$this, 'sysInfo']));
     }
 
     public function sysInfo($args)
