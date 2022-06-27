@@ -28,7 +28,7 @@ class SysInfoTemplate
     {
         $code = '<ul>' . "\n";
 
-        $bl = App::core()->behaviors();
+        $bl = App::core()->getBehaviors();
         foreach ($bl as $b => $f) {
             $code .= '<li>' . $b . ' : ';
             if (!$f->count()) {

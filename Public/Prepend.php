@@ -28,7 +28,7 @@ class Prepend extends ModulePrepend
         });
 
         App::core()->behavior('urlHandlerBeforeGetData')->add(function ($ctx): void {
-                $ctx->http_cache = (bool) App::core()->blog()->settings()->getGroup('sysinfo')->getSetting('http_cache');
+                $ctx->http_cache = (bool) App::core()->blog()->settings('sysinfo')->getSetting('http_cache');
         });
 
         new SysInfoTemplate();

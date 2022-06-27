@@ -92,8 +92,8 @@ class Handler extends AbstractPage
             ->setPageHead(
                 App::core()->resource()->load('sysinfo.css', 'Plugin', 'SysInfo', 'screen', App::core()->version()->getVersion('sysInfo')) .
                 App::core()->resource()->json('sysinfo', [
-                    'colorsyntax'       => App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax'),
-                    'colorsyntax_theme' => App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'),
+                    'colorsyntax'       => App::core()->user()->preferences('interface')->getPreference('user_ui_colorsyntax'),
+                    'colorsyntax_theme' => App::core()->user()->preferences('interface')->getPreference('user_ui_colorsyntax_theme'),
                     'msg'               => [
                         'confirm_del_tpl' => __('Are you sure you want to remove selected template cache files?'),
                         'confirm_del_sc'  => __('Are you sure you want to remove selected static cache files?'),
@@ -106,9 +106,9 @@ class Handler extends AbstractPage
             )
         ;
 
-        if (App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax')) {
+        if (App::core()->user()->preferences('interface')->getPreference('user_ui_colorsyntax')) {
             $this->setPageHead(
-                App::core()->resource()->loadCodeMirror(App::core()->user()->preference()->get('interface')->get('user_ui_colorsyntax_theme'))
+                App::core()->resource()->loadCodeMirror(App::core()->user()->preferences('interface')->getPreference('user_ui_colorsyntax_theme'))
             );
         }
 

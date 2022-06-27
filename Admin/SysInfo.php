@@ -271,7 +271,7 @@ class SysInfo
     public static function behaviours(): string
     {
         // Affichage de la liste des behaviours inscrits
-        $bl = App::core()->behaviors();
+        $bl = App::core()->getBehaviors();
 
         $str = '<table id="chk-table-result" class="sysinfo">' .
             '<caption>' . __('Behaviours list') . '</caption>' .
@@ -681,7 +681,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            App::core()->blog()->settings()->getGroup('system')->getSetting('store_plugin_url'),
+            App::core()->blog()->settings('system')->getSetting('store_plugin_url'),
             __('Repository plugins list'),
             __('Plugin ID')
         );
@@ -698,7 +698,7 @@ class SysInfo
     {
         return self::repoModules(
             $use_cache,
-            App::core()->blog()->settings()->getGroup('system')->getSetting('store_theme_url'),
+            App::core()->blog()->settings('system')->getSetting('store_theme_url'),
             __('Repository themes list'),
             __('Theme ID')
         );
